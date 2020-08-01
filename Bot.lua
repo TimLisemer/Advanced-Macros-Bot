@@ -1,7 +1,7 @@
 local threads = {}
 
-Cytooxien = not Cytooxien
-if not Cytooxien then return end
+Bot = not Bot
+if not Bot then return end
 
 
 local function startThreads()
@@ -268,7 +268,7 @@ end
 local inv = openInventory()
 
 --[[
-while(Cytooxien) do
+while(Bot) do
     setHotbar(6)
     sleep(1000)
     --sugarCane(-5220, 32.5, -7167, 110, 63, 180)
@@ -308,5 +308,5 @@ while(Cytooxien) do
 end
 ]]--
 
-Cytooxien = false
+Bot = false
 

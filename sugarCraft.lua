@@ -1,84 +1,64 @@
-local inv
-local map
-
-function findItem(itemName, chest)
-    local t = {}
-    if(chest == true) then
-        for a, b in pairs(map.contents) do
-            local item = inv.getSlot(b)
-            if item and item.id==itemName then
-            t[#t+1] = b
-            end
-        end
-    else
-        for a, b in pairs(map.main) do
-            local item = inv.getSlot(b)
-            if item and item.id==itemName then
-            t[#t+1] = b
-            end
-        end
-        for a, b in pairs(map.hotbar) do
-            local item = inv.getSlot(b)
-            if item and item.id==itemName then
-            t[#t+1] = b
-            end
-        end
-        if(chest == true) then
-            for a, b in pairs(map.hotbar) do
-                local item = inv.getSlot(b)
-                if item and item.id==itemName then
-                t[#t+1] = b
-                end
-            end
-        end
+local inv = openInventory()
+ 
+local function ref()
+  log("&eInventory types: ")
+  for a,b in pairs(inv.mapping) do
+    log(" > &7"..a)
+    if(a=="inventory")then
+      for a,b in pairs(b) do
+        log("    > "..a)
+      end
     end
-    return t
+  end
+  log("&bFunctions:")
+  for a,b in pairs(inv) do
+    if(type(b)=="function" or (type(b)=="table") and getmetatable(b) and getmetatable(b).luaFunction)then
+      log(" > &7"..a)
+    end
+  end
+end
+local map = inv.mapping.inventory
+ 
+ 
+function findCane()
+  local t = {}
+  for a, b in pairs(map.main) do
+    local item = inv.getSlot(b)
+    if item and item.id=="minecraft:sugar" then
+      t[#t+1] = b
+    end
+  end
+  for a, b in pairs(map.hotbar) do
+    local item = inv.getSlot(b)
+    if item and item.id=="minecraft:sugar" then
+      t[#t+1] = b
+    end
+  end
+  return t
 end
  
 function craftAll()
   sleep(3000)
   while true do
-    local t = findItem("minecraft:sugar_cane", map, false)
+    local t = findCane()
     if #t==0 then return end
     for a,b in pairs(t) do
-        inv.click(b)
-        waitTick()
-        inv.click(map.craftingIn[1])
-        waitTick()
-        inv.quick(map.craftingOut)
-        waitTick()
+      inv.click(b)
+      --sleep(40)
+      --waitTick()
+      inv.click(map.craftingIn[1])
+      --sleep(40)
+      --waitTick()
+      inv.quick(map.craftingOut)--, b)
+      --waitTick()
+      --sleep(40)
     end
   end
 end
-
-
-function move()
-    sleep(3000)
-    while true do
-        local t = findItem("minecraft:sugar", map, false)
-        if #t==0 then return end
-        for a,b in pairs(t) do
-            inv.quick(b)
-            waitTick()
-        end
-    end
-end
-  
-
-inv = openInventory()
-map = inv.mapping.inventory
-say("/clear")
-for i = 1, 36 do
-  say("/give @p minecraft:sugar_cane 64")
-end
-craftAll(map, inv)
-
-
-use(50)
-sleep(1000)
-inv = openInventory()
-map = inv.mapping["double chest"]
-
-move()
+ 
+ref()
+ 
+--findCane()
+craftAll()
  
 inv.close()
